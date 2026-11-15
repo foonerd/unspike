@@ -1,0 +1,71 @@
+name: release
+
+# A tag builds the release: the check, then the plugin's zip published as a
+# pre-release with its digest and the notes from the changelog. Run by hand
+# it builds everything and publishes nothing.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: check and the plugin zip
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - name: The tag names the version the plugin carries
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          version=$(sed -n 's/^ *"version": "\(.*\)",*$/\1/p' unspike/package.json | head -n1)
+          [ "$GITHUB_REF_NAME" = "v$version" ] || { echo "the tag is $GITHUB_REF_NAME, the plugin is $version" >&2; exit 1; }
+          grep -q "^## \[$version\]" CHANGELOG.md || { echo "CHANGELOG.md has no section for $version" >&2; exit 1; }
+          grep -q "\"changelog\": \"$version: " unspike/package.json || { echo "package.json's changelog line is not this version's" >&2; exit 1; }
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20
+      - run: scripts/check.sh
+      - run: scripts/package.sh
+      - name: The zip names the commit it was built from
+        run: |
+          unzip -p dist/unspike-*.zip build.json | grep -F "\"commit\": \"$(git rev-parse --short HEAD)\""
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-plugin
+          path: dist/unspike-*.zip
+          if-no-files-found: error
+
+  publish:
+    name: publish
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [build]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          name: release-plugin
+          path: dist
+      - name: Every asset's digest in SHA256SUMS
+        run: |
+          (cd dist && sha256sum unspike-*.zip > SHA256SUMS && cat SHA256SUMS)
+      - name: Release notes from the changelog, with the footer
+        run: |
+          scripts/release-notes.sh "${GITHUB_REF_NAME#v}" > dist/notes.md
+          [ -s dist/notes.md ] || { echo "CHANGELOG.md says nothing of ${GITHUB_REF_NAME#v}" >&2; exit 1; }
+          printf '\n' >> dist/notes.md
+          cat .github/release-footer.md >> dist/notes.md
+      # Published as a pre-release: it is made the latest by hand once it has
+      # been tried on a player (gh release edit <tag> --prerelease=false --latest).
+      - uses: softprops/action-gh-release@v3
+        with:
+          prerelease: true
+          body_path: dist/notes.md
+          files: |
+            dist/unspike-*.zip
+            dist/SHA256SUMS

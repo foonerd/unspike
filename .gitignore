@@ -1,0 +1,4 @@
+# The zips scripts/package.sh makes
+/dist/
+node_modules/
+package-lock.json
