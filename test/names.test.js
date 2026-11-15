@@ -11,6 +11,9 @@ const pkg = JSON.parse(read('package.json'));
 
 const STORE_NAME = 'unspike';
 const CATEGORY = 'system_controller';
+// What Volumio shows the plugin as: in its list of plugins, on the settings
+// page and over its messages.
+const SHOWN_AS = 'Unspike my CPU';
 
 test('the plugin is one thing by one name: its folder, its store name and its endpoint', () => {
     assert.equal(pkg.name, STORE_NAME);
@@ -22,6 +25,17 @@ test('the plugin is one thing by one name: its folder, its store name and its en
         assert.ok(endpoint.indexOf('"' + CATEGORY + '/' + STORE_NAME + '"') !== -1, endpoint);
     });
     assert.ok(read('install.sh').indexOf('PLUGIN_DIR="/data/plugins/' + CATEGORY + '/' + STORE_NAME + '"') !== -1);
+});
+
+test('the plugin is shown by one name, in every language', () => {
+    assert.equal(pkg.volumio_info.prettyName, SHOWN_AS);
+    const files = fs.readdirSync(path.join(plugin, 'i18n')).filter((f) => /^strings_.*\.json$/.test(f));
+    assert.ok(files.length > 1);
+    files.forEach((file) => {
+        const strings = JSON.parse(read(path.join('i18n', file))).UNSPIKE;
+        assert.equal(strings.PLUGIN_NAME, SHOWN_AS, file);
+        assert.equal(strings.PLUGIN_CONFIGURATION, SHOWN_AS, file);
+    });
 });
 
 test('the store is given what it asks of a plugin', () => {

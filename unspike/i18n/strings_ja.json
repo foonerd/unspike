@@ -1,7 +1,7 @@
 {
     "UNSPIKE": {
-        "PLUGIN_NAME": "Unspike",
-        "PLUGIN_CONFIGURATION": "Unspike",
+        "PLUGIN_NAME": "Unspike my CPU",
+        "PLUGIN_CONFIGURATION": "Unspike my CPU",
         "SECTION_STATUS": "このプレーヤーでは",
         "SECTION_STATUS_DOC": "このページを開いたときに Unspike がこのプレーヤーで確認した内容を下に示します。",
         "CHECK": "もう一度確認",

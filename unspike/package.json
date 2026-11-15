@@ -7,7 +7,7 @@
     "license": "MIT",
     "repository": "https://github.com/foonerd/unspike",
     "volumio_info": {
-        "prettyName": "Unspike",
+        "prettyName": "Unspike my CPU",
         "icon": "fa-tachometer",
         "plugin_type": "system_controller",
         "os": [

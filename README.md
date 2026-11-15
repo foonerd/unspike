@@ -1,4 +1,4 @@
-# Unspike
+# Unspike my CPU
 
 A Volumio 4 plugin with one job: it stops a Raspberry Pi 4, Pi 400 or Compute Module 4 running flat out for minutes after every start.
 
@@ -49,7 +49,7 @@ Without it, the same player took up to a quarter of a minute to answer a request
 
 ## Installing
 
-Install Unspike from Volumio's plugin store, under System Controller, switch it on, and restart the player once when it asks.
+Install it from Volumio's plugin store, where it is listed as *Unspike my CPU* under System Controller, switch it on, and restart the player once when it asks.
 
 To install a release by hand, copy its zip to the player, unpack it into a folder of its own and run `volumio plugin install` there.
 

@@ -1,7 +1,7 @@
 {
     "UNSPIKE": {
-        "PLUGIN_NAME": "Unspike",
-        "PLUGIN_CONFIGURATION": "Unspike",
+        "PLUGIN_NAME": "Unspike my CPU",
+        "PLUGIN_CONFIGURATION": "Unspike my CPU",
         "SECTION_STATUS": "Auf diesem Player",
         "SECTION_STATUS_DOC": "Was Unspike beim Öffnen dieser Seite auf diesem Player vorgefunden hat, steht unten.",
         "CHECK": "Erneut nachsehen",

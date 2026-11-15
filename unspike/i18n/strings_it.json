@@ -1,7 +1,7 @@
 {
     "UNSPIKE": {
-        "PLUGIN_NAME": "Unspike",
-        "PLUGIN_CONFIGURATION": "Unspike",
+        "PLUGIN_NAME": "Unspike my CPU",
+        "PLUGIN_CONFIGURATION": "Unspike my CPU",
         "SECTION_STATUS": "Su questo lettore",
         "SECTION_STATUS_DOC": "Qui sotto è scritto ciò che Unspike ha trovato su questo lettore all'apertura di questa pagina.",
         "CHECK": "Guarda di nuovo",
